@@ -4,138 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محلل خلوص مانع تسرب الزيت الهيدروليكي</title>
-    <!-- تضمين مكتبة Tailwind للتنسيق السريع -->
+    <!-- استدعاء مكتبة التنسيق السريع مع تخصيص الألوان الافتراضية للثيم الهندسي -->
     <script src="https://tailwindcss.com"></script>
     <style>
         @import url('https://googleapis.com');
-        body { font-family: 'Cairo', sans-serif; transition: all 0.2s ease; }
+        body { font-family: 'Cairo', sans-serif; transition: background-color 0.2s, color 0.2s; }
         .mono-font { font-family: 'JetBrains Mono', monospace; }
+        
+        /* ثيم لوحة التحكم الداكنة الاحترافية (Dark Cyber Theme) */
+        .theme-dark { background-color: #0b0f19; color: #f1f5f9; }
+        .theme-dark .main-card { background-color: #111827; border-color: #1f2937; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
+        .theme-dark .inner-box { background-color: #0b0f19; border-color: #1f2937; }
+        .theme-dark .input-field { background-color: #1f2937; border-color: #374151; color: #ffffff; }
+        .theme-dark .input-field:focus { border-color: #3b82f6; }
+        
+        /* ثيم لوحة التحكم المضيئة الفاخرة (Light Tech Theme) */
+        .theme-light { background-color: #f3f4f6; color: #111827; }
+        .theme-light .main-card { background-color: #ffffff; border-color: #e5e7eb; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .theme-light .inner-box { background-color: #f9fafb; border-color: #e5e7eb; }
+        .theme-light .input-field { background-color: #ffffff; border-color: #d1d5db; color: #111827; }
+        .theme-light .input-field:focus { border-color: #2563eb; }
     </style>
 </head>
-<body id="body-context" class="bg-slate-950 text-slate-50 min-h-screen flex flex-col antialiased">
+<body id="body-context" class="theme-dark min-h-screen flex flex-col antialiased">
 
-    <!-- شريط التحكم العلوي -->
-    <header id="header-bar" class="w-full bg-slate-900 border-b border-slate-800 shadow-sm sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="text-xl">⚙️</span>
+    <!-- شريط القيادة والتنقل الفاخر -->
+    <header id="header-bar" class="w-full bg-slate-900/90 border-b border-slate-800 shadow-lg backdrop-blur sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg text-white shadow-md shadow-blue-500/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
                 <div>
-                    <h1 class="text-sm font-bold" id="nav-title">محلل خلوص الـ Oil Guard</h1>
-                    <p class="text-[10px] text-slate-400" id="nav-subtitle">حالة القياس: الراحة والارتكاز السفلي</p>
+                    <h1 class="text-sm font-bold tracking-tight text-white" id="nav-title">محلل خلوص الـ Oil Guard</h1>
+                    <p class="text-[10px] text-blue-400 font-semibold uppercase tracking-wider" id="nav-subtitle">حالة القياس: الراحة والارتكاز السفلي</p>
                 </div>
             </div>
             
-            <div class="flex items-center gap-3">
-                <!-- أزرار اللغات -->
-                <div id="lang-zone" class="inline-flex rounded-md bg-slate-800 p-0.5 border border-slate-700">
-                    <button onclick="changeLang('ar')" id="btn-ar" class="rounded px-2 py-0.5 text-[11px] font-bold bg-slate-950 text-blue-400">العربية</button>
-                    <button onclick="changeLang('en')" id="btn-en" class="rounded px-2 py-0.5 text-[11px] font-bold text-slate-400 hover:text-white">EN</button>
-                    <button onclick="changeLang('fr')" id="btn-fr" class="rounded px-2 py-0.5 text-[11px] font-bold text-slate-400 hover:text-white">FR</button>
+            <div class="flex items-center gap-4">
+                <!-- مبدل اللغات الفاخر -->
+                <div id="lang-zone" class="inline-flex rounded-lg bg-slate-800 p-0.5 border border-slate-700/80 shadow-inner">
+                    <button onclick="changeLang('ar')" id="btn-ar" class="rounded-md px-2.5 py-1 text-[11px] font-bold transition bg-slate-950 text-blue-400 shadow">العربية</button>
+                    <button onclick="changeLang('en')" id="btn-en" class="rounded-md px-2.5 py-1 text-[11px] font-bold transition text-slate-400 hover:text-white">EN</button>
+                    <button onclick="changeLang('fr')" id="btn-fr" class="rounded-md px-2.5 py-1 text-[11px] font-bold transition text-slate-400 hover:text-white">FR</button>
                 </div>
-                <!-- زر السمة المطور -->
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 cursor-pointer text-xs">
+                <!-- زر السمة المطوّر -->
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white cursor-pointer text-[11px] font-bold transition flex items-center gap-1.5 shadow">
                     ☀️ <span id="theme-text">وضع مضيء</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- الهيكل الرئيسي المنظم في بطاقتين متوازيتين -->
-    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+    <!-- الواجهات الهندسية الرئيسية المنسقة -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- قسم مدخلات الميكرومتر (5 أعمدة) -->
-            <section id="card-input" class="lg:col-span-5 bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-md flex flex-col justify-between space-y-4">
-                <div>
-                    <div class="border-b border-slate-800 pb-3 mb-4">
-                        <h2 class="text-xs font-bold uppercase text-blue-400 tracking-wide" id="sec-input-title">أبعاد القياس الميكانيكي (mm)</h2>
-                        <p class="text-[11px] text-slate-400 mt-0.5" id="sec-input-desc">أدخل القراءات الفعلية بدقة لتحديد الفجوة</p>
-                    </div>
+            <!-- لوحة المدخلات (تأخذ 5 أعمدة) -->
+            <section id="card-input" class="main-card lg:col-span-5 rounded-xl border p-5 space-y-5 transition-all">
+                <div class="border-b border-slate-700/30 pb-3">
+                    <h2 class="text-xs font-bold uppercase text-blue-500 dark:text-blue-400 tracking-wider" id="sec-input-title">أبعاد القياس الميكانيكي (mm)</h2>
+                    <p class="text-[10px] text-slate-400 mt-0.5" id="sec-input-desc">أدخل القراءات الفعلية بدقة لتحديد الفجوة</p>
+                </div>
 
-                    <!-- الأبعاد الأفقية المقسمة -->
-                    <div class="space-y-2 mb-3">
-                        <label class="block text-[11px] font-bold text-slate-300" id="lbl-horiz-main">↔️ القطر الأفقي الداخلي المجموع (A + B):</label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="relative">
-                                <span class="absolute right-2.5 top-2 text-[10px] text-slate-500 font-bold" id="lbl-side-a">A (يمين)</span>
-                                <input type="number" id="inp-h1" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-950 border border-slate-800 rounded-md py-1.5 pl-2 pr-14 text-left focus:border-blue-500 focus:outline-none text-xs text-white">
-                            </div>
-                            <div class="relative">
-                                <span class="absolute right-2.5 top-2 text-[10px] text-slate-500 font-bold" id="lbl-side-b">B (يسار)</span>
-                                <input type="number" id="inp-h2" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-950 border border-slate-800 rounded-md py-1.5 pl-2 pr-14 text-left focus:border-blue-500 focus:outline-none text-xs text-white">
-                            </div>
+                <!-- مدخل القطر الأفقي -->
+                <div class="space-y-2">
+                    <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-300" id="lbl-horiz-main">↔️ القطر الأفقي الداخلي المجموع (A + B):</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="relative">
+                            <span class="absolute right-3 top-2.5 text-[10px] text-slate-400 font-bold" id="lbl-side-a">A (يمين)</span>
+                            <input type="number" id="inp-h1" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg py-2 pl-3 pr-14 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
                         </div>
-                    </div>
-
-                    <!-- البُعد العمودي -->
-                    <div class="space-y-1.5 mb-3">
-                        <label for="inp-v" class="block text-[11px] font-bold text-slate-300" id="lbl-vert">↕️ القطر العمودي الداخلي للمانع:</label>
-                        <input type="number" id="inp-v" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-950 border border-slate-800 rounded-md p-2 text-left focus:border-blue-500 focus:outline-none text-xs text-white">
-                    </div>
-
-                    <!-- قطر العمود -->
-                    <div class="space-y-1.5">
-                        <label for="inp-shaft" class="block text-[11px] font-bold text-slate-300" id="lbl-shaft">⭕ القطر الخارجي لعمود الدوران (Shaft):</label>
-                        <input type="number" id="inp-shaft" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-950 border border-slate-800 rounded-md p-2 text-left focus:border-blue-500 focus:outline-none text-xs text-white">
+                        <div class="relative">
+                            <span class="absolute right-3 top-2.5 text-[10px] text-slate-400 font-bold" id="lbl-side-b">B (يسار)</span>
+                            <input type="number" id="inp-h2" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg py-2 pl-3 pr-14 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="processData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-md shadow transition transform active:scale-[0.99] cursor-pointer text-xs" id="btn-submit">
+                <!-- مدخل القطر العمودي -->
+                <div class="space-y-1.5">
+                    <label for="inp-v" class="block text-[11px] font-bold text-slate-400 dark:text-slate-300" id="lbl-vert">↕️ القطر العمودي الداخلي للمانع:</label>
+                    <input type="number" id="inp-v" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg p-2.5 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
+                </div>
+
+                <!-- قطر العمود -->
+                <div class="space-y-1.5">
+                    <label for="inp-shaft" class="block text-[11px] font-bold text-slate-400 dark:text-slate-300" id="lbl-shaft">⭕ القطر الخارجي لعمود الدوران (Shaft):</label>
+                    <input type="number" id="inp-shaft" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg p-2.5 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
+                </div>
+
+                <button onclick="processData()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg shadow-blue-500/10 transition transform active:scale-[0.99] cursor-pointer text-xs" id="btn-submit">
                     تحليل وتدقيق البيانات الحسابية 📊
                 </button>
             </section>
 
-            <!-- قسم المخرجات والرسم المصغر المحاكي للواقع (7 أعمدة) -->
-            <section id="card-output" class="lg:col-span-7 bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-md flex flex-col justify-between gap-4">
+            <!-- لوحة التقارير والرسم التوضيحي الثابت المصغر (تأخذ 7 أعمدة) -->
+            <section id="card-output" class="main-card lg:col-span-7 rounded-xl border p-5 flex flex-col justify-between gap-5 transition-all">
                 
-                <!-- لوحة التقارير الرقمية -->
+                <!-- تقرير المخرجات الحسابية الرقمية -->
                 <div>
-                    <div class="border-b border-slate-800 pb-2 mb-3 flex items-center justify-between">
-                        <h2 class="text-xs font-bold uppercase text-emerald-400 tracking-wide" id="sec-output-title">تقرير جودة وتحليل الخلوص</h2>
-                        <span id="badge-status" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-950 text-slate-500 border border-slate-800">في انتظار البيانات</span>
+                    <div class="border-b border-slate-700/30 pb-3 mb-4 flex items-center justify-between">
+                        <h2 class="text-xs font-bold uppercase text-emerald-500 dark:text-emerald-400 tracking-wider" id="sec-output-title">تقرير جودة وتحليل الخلوص</h2>
+                        <span id="badge-status" class="px-2.5 py-1 rounded-md text-[10px] font-bold inner-box border text-slate-400 tracking-wide">في انتظار البيانات</span>
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-center">
-                            <span class="text-[10px] text-slate-500 font-bold block" id="out-lbl-actual">الخلوص الفعلي الحالي</span>
-                            <span id="out-actual" class="mono-font text-base font-bold text-white block mt-0.5">-</span>
+                        <div class="inner-box p-3 rounded-xl border text-center shadow-sm">
+                            <span class="text-[10px] text-slate-400 font-bold block mb-1" id="out-lbl-actual">الخلوص الفعلي الحالي</span>
+                            <span id="out-actual" class="mono-font text-lg font-bold block text-blue-500 dark:text-blue-400 mt-0.5">-</span>
                         </div>
-                        <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-center border-b-2 border-b-emerald-500">
-                            <span class="text-[10px] text-emerald-500 font-bold block" id="out-lbl-min">أدنى مسموح</span>
-                            <span id="out-min" class="mono-font text-sm font-bold text-emerald-400 block mt-1">-</span>
+                        <div class="inner-box p-3 rounded-xl border text-center border-b-2 border-b-emerald-500 shadow-sm">
+                            <span class="text-[10px] text-emerald-500 font-bold block mb-1" id="out-lbl-min">أدنى مسموح</span>
+                            <span id="out-min" class="mono-font text-sm font-bold text-emerald-500 dark:text-emerald-400 block mt-1">-</span>
                         </div>
-                        <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-center border-b-2 border-b-rose-500">
-                            <span class="text-[10px] text-rose-500 font-bold block" id="out-lbl-max">أقصى مسموح</span>
-                            <span id="out-max" class="mono-font text-sm font-bold text-rose-400 block mt-1">-</span>
+                        <div class="inner-box p-3 rounded-xl border text-center border-b-2 border-b-rose-500 shadow-sm">
+                            <span class="text-[10px] text-rose-500 font-bold block mb-1" id="out-lbl-max">أقصى مسموح</span>
+                            <span id="out-max" class="mono-font text-sm font-bold text-rose-500 dark:text-rose-400 block mt-1">-</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- الرسم الهندسي التوضيحي المصغر ومرتكز للأسفل -->
-                <div class="bg-slate-950 rounded-lg border border-slate-800 p-3 flex flex-col items-center justify-center min-h-[180px]">
-                    <span class="text-[10px] text-slate-500 font-bold mb-2 self-start" id="diagram-title">🎨 محاكاة حالة الراحة (العمود يرتكز و يلتصق بالأسفل تماماً)</span>
-                    
-                    <div class="w-36 h-36 relative flex items-center justify-center bg-slate-900/50 rounded-full border border-slate-800 p-1">
-                        <svg id="blueprint" viewBox="0 0 200 200" class="w-full h-full">
-                            <!-- دائرة المانع الثابتة (الخارجية) -->
-                            <circle cx="100" cy="100" r="90" fill="none" stroke="#ef4444" stroke-width="5" />
-                            <!-- خط انقسام نصفين أفقي -->
-                            <line x1="10" y1="100" x2="190" y2="100" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
-                            
-                            <!-- عمود الدوران (Rotor Shaft) - منزاح للأسفل ليلتصق بالحافة تماماً عند الراحة -->
-                            <!-- تم ضبط cy هندسياً ليكون ملتصقاً بالخلفية الحمراء من الأسفل -->
-                            <circle id="svg-shaft" cx="100" cy="117.5" r="72.5" fill="#334155" stroke="#3b82f6" stroke-width="3" />
-                            
-                            <!-- نقطة السنتر الحقيقية للمانع للقياس المرجعي -->
-                            <circle cx="100" cy="100" r="2" fill="#eab308" />
+                <!-- أيقونة هندسية مصغرة جداً وثابتة لشرح حالة الراحة الميكانيكية -->
+                <div class="inner-box rounded-xl border p-3 flex items-center gap-4 bg-slate-950/20 shadow-inner">
+                    <!-- حجم الصندوق تم تصغيره بشكل فائق (w-14 h-14 فقط) ليعمل كأيقونة ورمز تعبيري ثابت -->
+                    <div class="w-14 h-14 relative flex items-center justify-center bg-slate-900/40 rounded-full border border-slate-700/30 flex-shrink-0">
+                        <svg id="blueprint" viewBox="0 0 100 100" class="w-full h-full">
+                            <!-- دائرة المانع الثابتة الخارجية باللون الأحمر -->
+                            <circle cx="50" cy="50" r="46" fill="none" stroke="#ef4444" stroke-width="3" />
+                            <!-- خط انقسام ميكانيكي وهمي بالمنتصف -->
+                            <line x1="5" y1="50" x2="95" y2="50" stroke="#64748b" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.5"/>
+                            <!-- دائرة العمود: ثابتة ومستقلة، منزاحة لأسفل لتلمس القاع تماماً لشرح ميكانيكية الراحة -->
+                            <circle cx="50" cy="57" r="39" fill="#475569" stroke="#3b82f6" stroke-width="1.5" />
+                            <!-- مركز قياس السنتر -->
+                            <circle cx="50" cy="50" r="1" fill="#eab308" />
                         </svg>
                     </div>
 
-                    <!-- تفاصيل ومفاتيح الإيضاح -->
-                    <div class="flex gap-4 text-[9px] font-bold text-slate-400 mt-3 flex-wrap justify-center border-t border-slate-900 pt-2 w-full">
-                        <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-red-500 rounded-sm"></span><span id="leg-1">المانع</span></div>
-                        <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span><span id="leg-2">العمود (منزاح لأسفل)</span></div>
-                        <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-yellow-500 rounded-sm text-center"></span><span id="leg-3">فجوة الخلوص (في الأعلى)</span></div>
+                    <!-- نصوص الدليل والشرح المعزولة بجانب الرمز -->
+                    <div class="flex-grow space-y-1">
+                        <h4 class="text-[10px] font-bold text-slate-400" id="diagram-title">🎨 محاكاة حالة الراحة (أيقونة توضيحية للحالة فقط)</h4>
+                        <div class="flex gap-3 text-[9px] font-semibold text-slate-400/80 flex-wrap">
+                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span><span id="leg-1">المانع</span></span>
+                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span><span id="leg-2">العمود (ملتصق لأسفل)</span></span>
+                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span><span id="leg-3">فجوة الخلوص (في الأعلى دائماً)</span></span>
+                        </div>
                     </div>
                 </div>
 
@@ -144,7 +157,7 @@
     </main>
 
     <script>
-        // مصفوفة اللغات
+        // قاموس اللغات المهني الثابت
         const dictionary = {
             ar: {
                 navTitle: "محلل خلوص الـ Oil Guard", navSubtitle: "حالة القياس: الراحة والارتكاز السفلي",
@@ -153,8 +166,8 @@
                 lblVert: "↕️ القطر العمودي الداخلي للمانع:", lblShaft: "⭕ القطر الخارجي لعمود الدوران (Shaft):",
                 btnSubmit: "تحليل وتدقيق البيانات الحسابية 📊", secOutputTitle: "تقرير جودة وتحليل الخلوص",
                 outLblActual: "الخلوص الفعلي الحالي", outLblMin: "أدنى مسموح", outLblMax: "أقصى مسموح",
-                diagramTitle: "🎨 محاكاة حالة الراحة (العمود يرتكز و يلتصق بالأسفل تماماً)",
-                leg1: "المانع", leg2: "العمود (منزاح لأسفل)", leg3: "فجوة الخلوص (في الأعلى)",
+                diagramTitle: "🎨 محاكاة حالة الراحة (أيقونة توضيحية للحالة فقط)",
+                leg1: "المانع", leg2: "العمود (ملتصق لأسفل)", leg3: "فجوة الخلوص (في الأعلى دائماً)",
                 errFields: "تنبيه: يُرجى ملء حقول القياس بأرقام موجبة صحيحة.",
                 errCalc: "خطأ: قطر العمود أكبر أو مساوي لقطر المانع! تحقق من الأرقام.",
                 stWait: "في انتظار البيانات", stGood: "✅ خلوص آمن وممتاز",
@@ -168,8 +181,8 @@
                 lblVert: "↕️ Guard Vertical Inner Diameter:", lblShaft: "⭕ Rotor Shaft Outer Diameter:",
                 btnSubmit: "Analyze & Verify Data 📊", secOutputTitle: "Clearance Evaluation Report",
                 outLblActual: "Actual Clearance", outLblMin: "Min Limit", outLblMax: "Max Limit",
-                diagramTitle: "🎨 Rest Position (Shaft resting & touching the absolute bottom)",
-                leg1: "Guard", leg2: "Shaft (Downshifted)", leg3: "Clearance Gap (At Top)",
+                diagramTitle: "🎨 Rest Position Simulation (Iconic Illustration Only)",
+                leg1: "Guard", leg2: "Shaft (Bottomed)", leg3: "Clearance Gap (Always Top)",
                 errFields: "Alert: Please fill all fields with valid positive dimensions.",
                 errCalc: "Error: Shaft exceeds or equals inner guard diameter! Check values.",
                 stWait: "Awaiting Data", stGood: "✅ Secure & Safe Clearance",
@@ -183,12 +196,12 @@
                 lblVert: "↕️ Joint Diamètre Vertical:", lblShaft: "⭕ Diamètre de l'Arbre Rotor (Shaft):",
                 btnSubmit: "Analyser les Données 📊", secOutputTitle: "Rapport d'Analyse du Jeu",
                 outLblActual: "Jeu Actuel", outLblMin: "Limite Min", outLblMax: "Limite Max",
-                diagramTitle: "🎨 Position de repos (L'arbre repose et touche le fond)",
+                diagramTitle: "🎨 Position de repos (Illustration iconique uniquement)",
                 leg1: "Joint", leg2: "Arbre (Abaissé)", leg3: "Espace de Jeu (En haut)",
                 errFields: "Alerte: Veuillez remplir tous les champs avec des valeurs positives.",
                 errCalc: "Erreur: Le diamètre de l'arbre dépasse le diamètre du joint! Vérifiez.",
                 stWait: "En attente", stGood: "✅ Jeu Sûr et Conforme",
-                stTight: "⚠️ Trop Serré (Risque de Friction)", textLoose: "❌ Jeu Trop Lâche (Fuite Certifiée)",
+                stTight: "⚠️ Trop Serré (Risque de Friction)", stLoose: "❌ Jeu Trop Lâche (Fuite Certifiée)",
                 txtLight: "Mode Clair", txtDark: "Mode Sombre"
             }
         };
@@ -196,7 +209,6 @@
         let currentLang = 'ar';
         let isDarkMode = true;
 
-        // دالة تبديل اللغة والاتجاهات
         function changeLang(lang) {
             currentLang = lang;
             const dict = dictionary[lang];
@@ -223,61 +235,51 @@
 
             updateThemeButtonText();
 
-            // ريست للنتائج
+            // ريست المخرجات عند التبديل
             document.getElementById('out-actual').innerText = "-";
             document.getElementById('out-min').innerText = "-";
             document.getElementById('out-max').innerText = "-";
             document.getElementById('badge-status').innerText = dict.stWait;
-            document.getElementById('badge-status').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-slate-950 text-slate-500 border border-slate-800";
+            document.getElementById('badge-status').className = "px-2.5 py-1 rounded-md text-[10px] font-bold inner-box border text-slate-400 tracking-wide";
 
             ['ar', 'en', 'fr'].forEach(l => {
                 const btn = document.getElementById(`btn-${l}`);
-                btn.className = l === lang ? "rounded px-2 py-0.5 text-[11px] font-bold bg-slate-950 text-blue-400" : "rounded px-2 py-0.5 text-[11px] font-bold text-slate-400 hover:text-white";
+                btn.className = l === lang ? "rounded-md px-2.5 py-1 text-[11px] font-bold transition bg-slate-950 text-blue-400 shadow" : "rounded-md px-2.5 py-1 text-[11px] font-bold transition text-slate-400 hover:text-white";
             });
         }
 
-        // دالة التبديل المستقلة والمضمونة للوضع الداكن/المضيء
+        // دالة تبديل السمة بين وضع التكنولوجيا المضيء ووضع السيبر المظلم
         function toggleTheme() {
             isDarkMode = !isDarkMode;
             const body = document.getElementById('body-context');
             const header = document.getElementById('header-bar');
-            const cardIn = document.getElementById('card-input');
-            const cardOut = document.getElementById('card-output');
             const langZone = document.getElementById('lang-zone');
             const btnTheme = document.getElementById('theme-toggle-btn');
             
             if(isDarkMode) {
-                // تطبيق تدرجات الألوان الداكنة
-                body.className = "bg-slate-950 text-slate-50 min-h-screen flex flex-col antialiased";
-                header.className = "w-full bg-slate-900 border-b border-slate-800 shadow-sm sticky top-0 z-50";
-                cardIn.className = "lg:col-span-5 bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-md flex flex-col justify-between space-y-4";
-                cardOut.className = "lg:col-span-7 bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-md flex flex-col justify-between gap-4";
-                langZone.className = "inline-flex rounded-md bg-slate-800 p-0.5 border border-slate-700";
-                btnTheme.className = "p-1.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 cursor-pointer text-xs";
+                body.className = "theme-dark min-h-screen flex flex-col antialiased";
+                header.className = "w-full bg-slate-900/90 border-b border-slate-800 shadow-lg backdrop-blur sticky top-0 z-50";
+                langZone.className = "inline-flex rounded-lg bg-slate-800 p-0.5 border border-slate-700/80 shadow-inner";
+                btnTheme.className = "p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white cursor-pointer text-[11px] font-bold transition flex items-center gap-1.5 shadow";
             } else {
-                // تطبيق تدرجات الألوان المضيئة الناصعة
-                body.className = "bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased";
-                header.className = "w-full bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50";
-                cardIn.className = "lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4";
-                cardOut.className = "lg:col-span-7 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between gap-4";
-                langZone.className = "inline-flex rounded-md bg-slate-100 p-0.5 border border-slate-200";
-                btnTheme.className = "p-1.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 cursor-pointer text-xs";
+                body.className = "theme-light min-h-screen flex flex-col antialiased";
+                header.className = "w-full bg-white/95 border-b border-slate-200 shadow-md backdrop-blur sticky top-0 z-50";
+                langZone.className = "inline-flex rounded-lg bg-slate-200 p-0.5 border border-slate-300 shadow-inner";
+                btnTheme.className = "p-2 rounded-lg bg-slate-200 border border-slate-300 text-slate-700 hover:bg-slate-300 hover:text-slate-900 cursor-pointer text-[11px] font-bold transition flex items-center gap-1.5 shadow";
             }
             updateThemeButtonText();
         }
 
         function updateThemeButtonText() {
-            const btnText = document.getElementById('theme-text');
-            const btnBtn = document.getElementById('theme-toggle-btn');
+            const btnTheme = document.getElementById('theme-toggle-btn');
             const dict = dictionary[currentLang];
             if(isDarkMode) {
-                btnBtn.innerHTML = `☀️ <span>${dict.txtLight}</span>`;
+                btnTheme.innerHTML = `☀️ <span>${dict.txtLight}</span>`;
             } else {
-                btnBtn.innerHTML = `🌙 <span>${dict.txtDark}</span>`;
+                btnTheme.innerHTML = `🌙 <span>${dict.txtDark}</span>`;
             }
         }
 
-        // دالة الحساب والمعالجة ونقل مركز العمود إلى الأسفل
         function processData() {
             const dict = dictionary[currentLang];
             const h1 = parseFloat(document.getElementById('inp-h1').value);
@@ -298,7 +300,6 @@
                 return;
             }
 
-            // الحسابات المعتمدة (0.0010 إلى 0.0020 من القطر)
             const minLimit = shaft * 0.0010;
             const maxLimit = shaft * 0.0020;
 
@@ -307,31 +308,16 @@
             document.getElementById('out-max').innerText = maxLimit.toFixed(3) + " mm";
 
             const badge = document.getElementById('badge-status');
-            const svgShaft = document.getElementById('svg-shaft');
 
-            // تغيير حجم ونقل موضع مركز العمود (cy) ليلتصق بالحافة السفلية بناءً على القطر الجديد
-            const maxGuardRadius = 90; // نصف قطر دائرة المانع الثابتة في الـ SVG
-            const computedShaftRadius = (shaft / avgGuardDiameter) * maxGuardRadius;
-            
-            // الارتكاز لأسفل: مركز الدوران العمودي (cy) = الحافة السفلية (100+90) ناقصاً نصف قطر العمود الجديد
-            const finalCy = (100 + maxGuardRadius) - computedShaftRadius;
-
-            svgShaft.setAttribute('r', computedShaftRadius);
-            svgShaft.setAttribute('cy', finalCy);
-
-            // تلوين الحالات
             if (actualClearance >= minLimit && actualClearance <= maxLimit) {
                 badge.innerText = dict.stGood;
-                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
-                svgShaft.setAttribute('stroke', '#10b981');
+                badge.className = "px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 tracking-wide";
             } else if (actualClearance < minLimit) {
                 badge.innerText = dict.stTight;
-                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-800";
-                svgShaft.setAttribute('stroke', '#f59e0b');
+                badge.className = "px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 tracking-wide";
             } else {
                 badge.innerText = dict.stLoose;
-                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950 text-rose-400 border border-rose-800";
-                svgShaft.setAttribute('stroke', '#ef4444');
+                badge.className = "px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-500/10 text-rose-500 border border-rose-500/20 tracking-wide";
             }
         }
     </script>

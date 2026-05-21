@@ -1,361 +1,325 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="app-html">
+<html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة خلوص مانع تسرب الزيت - Oil Guard Clearance Calculator</title>
-    <!-- تضمين مكتبة Tailwind CSS للتصميم -->
-    <script src="https://jsdelivr.net"></script>
+    <title>محلل خلوص مانع تسرب الزيت الهيدروليكي</title>
+    <!-- تضمين مكتبة Tailwind CSS الرسمية للتصميم الاحترافي -->
+    <script src="https://tailwindcss.com"></script>
     <style>
         @import url('https://googleapis.com');
-        body { font-family: 'Cairo', 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        body { font-family: 'Cairo', sans-serif; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        /* تأثيرات انتقال ناعمة للألوان والوضع الداكن */
+        * { transition: background-color 0.2s ease, border-color 0.2s ease, text-color 0.2s ease; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen p-4 md:p-8 dark:bg-gray-900 dark:text-gray-100" id="app-body">
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 min-h-screen flex flex-col antialiased">
 
-    <div class="max-w-6xl mx-auto bg-gray-800 dark:bg-gray-800 bg-white text-gray-900 dark:text-gray-100 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden" id="main-card">
-        
-        <!-- شريط التحكم العلوي (اللغات والوضع الليلي) -->
-        <div class="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3 flex justify-between items-center flex-wrap gap-3">
-            <!-- تبديل اللغة -->
-            <div class="flex gap-2">
-                <button onclick="setLanguage('ar')" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition bg-blue-600 text-white" id="lang-ar">العربية</button>
-                <button onclick="setLanguage('en')" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200" id="lang-en">English</button>
-                <button onclick="setLanguage('fr')" class="px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200" id="lang-fr">Français</button>
+    <!-- شريط التنقل العلوي الاحترافي -->
+    <header class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">⚙️</span>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight text-slate-900 dark:text-white" id="nav-title">محلل خلوص الـ Oil Guard</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400" id="nav-subtitle">منصة الحسابات الميكانيكية للمولدات الضخمة</p>
+                </div>
             </div>
-            <!-- زر الوضع الليلي/المضيء -->
-            <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-sm font-semibold cursor-pointer hover:scale-105 transition flex items-center gap-2" id="theme-btn">
-                🌙 <span id="txt-theme">الوضع المضيء</span>
-            </button>
-        </div>
-
-        <!-- الهيدر -->
-        <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 text-center text-white">
-            <h1 class="text-2xl md:text-3xl font-bold flex justify-center items-center gap-3" id="txt-title">
-                ⚙️ نظام فحص وتحليل خلوص مانع تسرب الزيت (Oil Guard)
-            </h1>
-            <p class="text-blue-100 mt-2 text-sm md:text-base" id="txt-subtitle">تطبيق هندسي لحساب خلوص المولدات والتوربينات الكبيرة بدقة</p>
-        </div>
-
-        <!-- محتوى التطبيق الرئيسي -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 md:p-8">
             
-            <!-- قسم المدخلات -->
-            <div class="space-y-6">
-                <div class="border-b border-gray-200 dark:border-gray-700 pb-2">
-                    <h2 class="text-lg font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-2" id="txt-input-section">
-                        📥 إدخال البيانات الميكانيكية (مم)
-                    </h2>
+            <!-- أزرار التحكم: اللغات + تبديل السمة -->
+            <div class="flex items-center gap-4">
+                <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200 dark:border-slate-700">
+                    <button onclick="changeLang('ar')" id="btn-ar" class="rounded-md px-3 py-1 text-xs font-semibold bg-white dark:bg-slate-900 shadow-sm text-blue-600 dark:text-blue-400">العربية</button>
+                    <button onclick="changeLang('en')" id="btn-en" class="rounded-md px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">EN</button>
+                    <button onclick="changeLang('fr')" id="btn-fr" class="rounded-md px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">FR</button>
                 </div>
-
-                <!-- مدخلات القطر الأفقي المقسم -->
-                <div class="bg-gray-50 dark:bg-gray-850 p-4 rounded-xl border border-gray-200 dark:border-gray-700 space-y-4">
-                    <label class="block text-sm font-medium text-amber-600 dark:text-amber-400" id="txt-horiz-label">↔️ القطر الداخلي الأفقي (مانع التسرب المقسم):</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block mb-1" id="txt-horiz-r">النصف الأيمن (A)</span>
-                            <input type="number" id="horiz_1" step="0.01" placeholder="0.00" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg p-2.5 text-center focus:border-blue-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block mb-1" id="txt-horiz-l">النصف الأيسر (B)</span>
-                            <input type="number" id="horiz_2" step="0.01" placeholder="0.00" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg p-2.5 text-center focus:border-blue-500 focus:outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- مدخلات القطر العمودي والعمود -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-gray-50 dark:bg-gray-850 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                        <label for="vert" class="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-2" id="txt-vert-label">↕️ القطر الداخلي العمودي:</label>
-                        <input type="number" id="vert" step="0.01" placeholder="0.00" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg p-2.5 text-center focus:border-blue-500 focus:outline-none">
-                    </div>
-
-                    <div class="bg-gray-50 dark:bg-gray-850 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                        <label for="shaft" class="block text-sm font-medium text-teal-600 dark:text-teal-400 mb-2" id="txt-shaft-label">⭕ القطر الخارجي لعمود الدوران:</label>
-                        <input type="number" id="shaft" step="0.01" placeholder="0.00" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg p-2.5 text-center focus:border-blue-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <!-- زر الحساب -->
-                <button onclick="calculateClearance()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-200 shadow-lg cursor-pointer transform active:scale-98" id="txt-btn-calc">
-                    📊 احسب الخلوص والحدود المسموحة
+                
+                <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer" title="تبديل الوضع الليلي">
+                    <span id="theme-icon" class="text-base">☀️</span>
                 </button>
             </div>
-
-            <!-- قسم المخرجات والرسم التوضيحي -->
-            <div class="space-y-6 flex flex-col justify-between">
-                
-                <!-- لوحة النتائج الرقمية -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-5 rounded-xl border border-gray-200 dark:border-gray-700 space-y-4">
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-2">
-                        <h2 class="text-lg font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2" id="txt-output-section">
-                            📋 تقرير فحص الخلوص المعياري
-                        </h2>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block" id="txt-res-actual">الخلوص الفعلي الحالي</span>
-                            <span id="res_actual" class="text-xl font-bold">-</span>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block" id="txt-res-status">حالة الخلوص</span>
-                            <span id="res_status" class="text-sm font-bold text-gray-400">-</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 pt-2">
-                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg border border-dotted border-gray-300 dark:border-gray-600 text-center">
-                            <span class="text-xs text-emerald-600 dark:text-emerald-300 block" id="txt-res-min">أقل خلوص هندسي مسموح</span>
-                            <span id="res_min" class="text-lg font-semibold text-emerald-600 dark:text-emerald-400">-</span>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg border border-dotted border-gray-300 dark:border-gray-600 text-center">
-                            <span class="text-xs text-rose-600 dark:text-rose-300 block" id="txt-res-max">أقصى خلوص هندسي مسموح</span>
-                            <span id="res_max" class="text-lg font-semibold text-rose-600 dark:text-rose-400">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- الرسم الهندسي التوضيحي التفاعلي -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center">
-                    <span class="text-xs text-gray-500 dark:text-gray-400 mb-2 self-start" id="txt-diagram-title">🎨 رسم توضيحي للمقطع العرضي (العمود داخل المانع):</span>
-                    
-                    <svg id="visual_diagram" viewBox="0 0 200 200" class="w-48 h-48 md:w-56 md:h-56">
-                        <!-- مانع التسرب الخارجي (الجسم الثابت) -->
-                        <circle cx="100" cy="100" r="85" fill="none" stroke="#ef4444" stroke-width="8" />
-                        <!-- خط التقسيم النصفين -->
-                        <line x1="15" y1="100" x2="185" y2="100" stroke="#9ca3af" stroke-width="1" stroke-dasharray="2,2" />
-                        <!-- العمود الدوار الداخلي -->
-                        <circle id="svg_shaft" cx="100" cy="100" r="65" fill="#4b5563" stroke="#3b82f6" stroke-width="4" />
-                        <!-- فجوة الخلوص المستهدفة -->
-                        <circle cx="100" cy="100" r="73" fill="none" stroke="#eab308" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
-                        <!-- مركز الدوران -->
-                        <circle cx="100" cy="100" r="2" fill="white" />
-                    </svg>
-
-                    <div class="flex gap-4 text-xs mt-3 flex-wrap justify-center">
-                        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-red-500 rounded-full inline-block"></span> <span id="leg-guard">المانع المقسم</span></span>
-                        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-500 rounded-full inline-block"></span> <span id="leg-shaft">عمود الدوران</span></span>
-                        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-yellow-500 rounded-full inline-block"></span> <span id="leg-gap">فجوة الخلوص</span></span>
-                    </div>
-                </div>
-
-            </div>
         </div>
-    </div>
+    </header>
 
-    <!-- المحرك البرمجي (الترجمات والعمليات) -->
+    <!-- المحتوى الرئيسي المنظم -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- العمود الأيسر: مدخلات البيانات القياسية (يشغل 5 أعمدة) -->
+            <section class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-6">
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+                    <h2 class="text-sm font-bold tracking-wide uppercase text-blue-600 dark:text-blue-400" id="sec-input-title">أبعاد القياس الميكانيكي (mm)</h2>
+                    <p class="text-xs text-slate-400 mt-1" id="sec-input-desc">يرجى إدخال القراءات المأخوذة بواسطة الميكرومتر بدقة</p>
+                </div>
+
+                <!-- مجموعة مدخلات القطر الأفقي -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300" id="lbl-horiz-main">↔️ القطر الأفقي الداخلي (للنصفين):</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-semibold" id="lbl-side-a">A (يمين)</span>
+                            <input type="number" id="inp-h1" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg py-2 pl-3 pr-16 text-left focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm text-slate-900 dark:text-white">
+                        </div>
+                        <div class="relative">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-semibold" id="lbl-side-b">B (يسار)</span>
+                            <input type="number" id="inp-h2" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg py-2 pl-3 pr-16 text-left focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm text-slate-900 dark:text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- مدخل القطر العمودي -->
+                <div class="space-y-2">
+                    <label for="inp-v" class="block text-xs font-bold text-slate-700 dark:text-slate-300" id="lbl-vert">↕️ القطر العمودي الداخلي:</label>
+                    <input type="number" id="inp-v" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-left focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm text-slate-900 dark:text-white">
+                </div>
+
+                <!-- مدخل قطر العمود الدوار -->
+                <div class="space-y-2">
+                    <label for="inp-shaft" class="block text-xs font-bold text-slate-700 dark:text-slate-300" id="lbl-shaft">⭕ القطر الخارجي لعمود الدوران (Shaft):</label>
+                    <input type="number" id="inp-shaft" placeholder="0.000" step="0.001" class="mono-font w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-left focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm text-slate-900 dark:text-white">
+                </div>
+
+                <!-- زر المعالجة الرئيسي -->
+                <button onclick="processData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-sm transition transform active:scale-[0.99] cursor-pointer text-sm" id="btn-submit">
+                    تحليل وتدقيق البيانات الحسابية 📊
+                </button>
+            </section>
+
+            <!-- العمود الأيمن: لوحة النتائج والرسم الهندسي (يشغل 7 أعمدة) -->
+            <section class="lg:col-span-7 space-y-6">
+                
+                <!-- لوحة عرض تقرير الخلوص الرقمي -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <div class="border-b border-slate-100 dark:border-slate-800 pb-3 mb-4 flex items-center justify-between">
+                        <h2 class="text-sm font-bold tracking-wide uppercase text-emerald-600 dark:text-emerald-400" id="sec-output-title">تقرير جودة وتحليل الخلوص</h2>
+                        <span id="badge-status" class="px-2.5 py-1 rounded text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-400">في انتظار البيانات</span>
+                    </div>
+
+                    <!-- شبكة توزيع المخرجات بانتظام وعزل كامل -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-900 text-center">
+                            <span class="text-[11px] font-bold text-slate-400 block uppercase" id="out-lbl-actual">الخلوص الحالي الفعلي</span>
+                            <span id="out-actual" class="mono-font text-2xl font-bold text-slate-800 dark:text-white block mt-1">-</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-900 text-center border-b-2 border-b-emerald-500">
+                            <span class="text-[11px] font-bold text-emerald-500 block uppercase" id="out-lbl-min">أدنى خلوص مسموح</span>
+                            <span id="out-min" class="mono-font text-xl font-bold text-emerald-600 dark:text-emerald-400 block mt-2">-</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-100 dark:border-slate-900 text-center border-b-2 border-b-rose-500">
+                            <span class="text-[11px] font-bold text-rose-500 block uppercase" id="out-lbl-max">أقصى خلوص مسموح</span>
+                            <span id="out-max" class="mono-font text-xl font-bold text-rose-600 dark:text-rose-400 block mt-2">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- لوحة الرسم الهندسي التوضيحي عالي الدقة -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center justify-center min-h-[320px]">
+                    <div class="w-full border-b border-slate-100 dark:border-slate-800 pb-2 mb-4 self-start">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase" id="diagram-title">🎨 مسقط عرضي هندسي محاكي للتجميع (Cross-Section)</h3>
+                    </div>
+
+                    <!-- مجسم رسم الـ SVG المحسن والمعزول -->
+                    <div class="relative w-64 h-64 bg-slate-50 dark:bg-slate-950 rounded-full border border-slate-100 dark:border-slate-900 flex items-center justify-center p-4">
+                        <svg id="blueprint" viewBox="0 0 200 200" class="w-full h-full transform -rotate-90">
+                            <!-- القشرة الخارجية الثابتة للـ Oil Guard -->
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="#64748b" stroke-width="4" opacity="0.3"/>
+                            <!-- حلقة مانع التسرب النحاسية الخارجية -->
+                            <circle cx="100" cy="100" r="82" fill="none" stroke="#ef4444" stroke-width="7" id="svg-guard" stroke-dasharray="280 2" />
+                            <!-- خط انقسام النصفين للقطعة الميكانيكية -->
+                            <line x1="100" y1="10" x2="100" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+                            <!-- مسار فجوة الخلوص الدائري البديل -->
+                            <circle cx="100" cy="100" r="69" fill="none" stroke="#eab308" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+                            <!-- عمود الدوران (Rotor Shaft) -->
+                            <circle id="svg-shaft" cx="100" cy="100" r="62" fill="#334155" stroke="#3b82f6" stroke-width="3" class="dark:fill-slate-800"/>
+                            <!-- نقطة سنتر المركز الميكانيكي -->
+                            <circle cx="100" cy="100" r="2.5" fill="#f8fafc"/>
+                        </svg>
+                    </div>
+
+                    <!-- دليل مفاتيح المصطلحات على الرسم -->
+                    <div class="flex flex-wrap justify-center gap-6 text-[11px] font-semibold text-slate-500 mt-6 border-t border-slate-100 dark:border-slate-800 pt-4 w-full">
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 bg-red-500 rounded-sm"></span><span id="leg-1">جسم المانع (المقسم)</span></div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-500 rounded-sm"></span><span id="leg-2">العمود الدوار (Shaft)</span></div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 bg-yellow-500 rounded-sm"></span><span id="leg-3">منطقة الخلوص المستهدفة</span></div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- محرك العمليات، التحكم باللغات، وإصلاح السمة بالكامل -->
     <script>
-        // مصفوفة الترجمات الكاملة للغات الثلاث
-        const translations = {
+        // قاموس اللغات المهني الكامل والموحد
+        const dictionary = {
             ar: {
-                dir: "rtl",
-                title: "⚙️ نظام فحص وتحليل خلوص مانع تسرب الزيت (Oil Guard)",
-                subtitle: "تطبيق هندسي لحساب خلوص المولدات والتوربينات الكبيرة بدقة",
-                inputSection: "📥 إدخال البيانات الميكانيكية (مم)",
-                horizLabel: "↔️ القطر الداخلي الأفقي (مانع التسرب المقسم):",
-                horizR: "النصف الأيمن (A)",
-                horizL: "النصف الأيسر (B)",
-                vertLabel: "↕️ القطر الداخلي العمودي:",
-                shaftLabel: "⭕ القطر الخارجي لعمود الدوران:",
-                btnCalc: "📊 احسب الخلوص والحدود المسموحة",
-                outputSection: "📋 تقرير فحص الخلوص المعياري",
-                resActual: "الخلوص الفعلي الحالي",
-                resStatus: "حالة الخلوص",
-                resMin: "أقل خلوص هندسي مسموح",
-                resMax: "أقصى خلوص هندسي مسموح",
-                diagramTitle: "🎨 رسم توضيحي للمقطع العرضي (العمود داخل المانع):",
-                legGuard: "المانع المقسم",
-                legShaft: "عمود الدوران",
-                legGap: "فجوة الخلوص",
-                alertFields: "برجاء إدخال كافة قراءات الأبعاد بشكل صحيح وموجب.",
-                alertError: "خطأ هندسي: قطر المانع أصغر من أو يساوي قطر العمود! يرجى مراجعة القياسات.",
-                statusGood: "✅ خلوص ممتاز (ضمن الحدود)",
-                statusTight: "⚠️ ضيق جداً (خطر احتكاك)",
-                statusLoose: "❌ واسع جداً (تسريب زيت مؤكد)"
+                navTitle: "محلل خلوص الـ Oil Guard", navSubtitle: "منصة الحسابات الميكانيكية للمولدات الضخمة",
+                secInputTitle: "أبعاد القياس الميكانيكي (mm)", secInputDesc: "يرجى إدخال القراءات المأخوذة بواسطة الميكرومتر بدقة",
+                lblHorizMain: "↔️ القطر الأفقي الداخلي (للنصفين):", lblSideA: "A (يمين)", lblSideB: "B (يسار)",
+                lblVert: "↕️ القطر العمودي الداخلي:", lblShaft: "⭕ القطر الخارجي لعمود الدوران (Shaft):",
+                btnSubmit: "تحليل وتدقيق البيانات الحسابية 📊", secOutputTitle: "تقرير جودة وتحليل الخلوص",
+                outLblActual: "الخلوص الحالي الفعلي", outLblMin: "أدنى خلوص مسموح", outLblMax: "أقصى خلوص مسموح",
+                diagramTitle: "🎨 مسقط عرضي هندسي محاكي للتجميع (Cross-Section)",
+                leg1: "جسم المانع (المقسم)", leg2: "العمود الدوار (Shaft)", leg3: "منطقة الخلوص المستهدفة",
+                errFields: "تنبيه: يُرجى ملء كافة حقول القياس بأرقام موجبة صحيحة قبل التحليل.",
+                errCalc: "خطأ في الأبعاد: قطر العمود أكبر من أو يساوي القطر الداخلي للمانع! تحقق من أرقامك.",
+                stWait: "في انتظار البيانات", stGood: "✅ خلوص مطاطي آمن وضمن الحدود",
+                stTight: "⚠️ الخلوص ضيق جداً (خطر احتكاك ميكانيكي)", stLoose: "❌ الخلوص واسع جداً (خطر تسريب مؤكد)"
             },
             en: {
-                dir: "ltr",
-                title: "⚙️ Oil Guard Clearance Analysis System",
-                subtitle: "Engineering application for heavy generators & turbines seals calculation",
-                inputSection: "📥 Input Mechanical Measurements (mm)",
-                horizLabel: "↔️ Horizontal Inner Diameter (Split Ring Oil Seal):",
-                horizR: "Right Half (A)",
-                horizL: "Left Half (B)",
-                vertLabel: "↕️ Vertical Inner Diameter:",
-                shaftLabel: "⭕ Rotor Shaft Outer Diameter:",
-                btnCalc: "📊 Calculate Clearance & Standard Limits",
-                outputSection: "📋 Standard Clearance Inspection Report",
-                resActual: "Current Actual Clearance",
-                resStatus: "Clearance Status",
-                resMin: "Min Allowed Engineering Clearance",
-                resMax: "Max Allowed Engineering Clearance",
-                diagramTitle: "🎨 Cross-Section Technical Diagram (Shaft inside Guard):",
-                legGuard: "Split Guard",
-                legShaft: "Rotor Shaft",
-                legGap: "Clearance Gap",
-                alertFields: "Please enter all dimensional measurements correctly with positive numbers.",
-                alertError: "Engineering Error: Guard diameter is smaller or equal to shaft diameter! Check values.",
-                statusGood: "✅ Excellent Clearance (In Range)",
-                statusTight: "⚠️ Too Tight (Friction Hazard)",
-                statusLoose: "❌ Too Loose (Guaranteed Oil Leak)"
+                navTitle: "Oil Guard Clearance Analyzer", navSubtitle: "Mechanical calculation platform for heavy generators",
+                secInputTitle: "Mechanical Dimensions Input (mm)", secInputDesc: "Please enter micrometer measurements accurately",
+                lblHorizMain: "↔️ Inner Horizontal Diameter (Both Halves):", lblSideA: "A (Right)", lblSideB: "B (Left)",
+                lblVert: "↕️ Inner Vertical Diameter:", lblShaft: "⭕ Rotor Shaft Outer Diameter:",
+                btnSubmit: "Analyze & Verify Calculations 📊", secOutputTitle: "Clearance Quality & Analysis Report",
+                outLblActual: "Actual Clearance", outLblMin: "Min Allowed Clearance", outLblMax: "Max Allowed Clearance",
+                diagramTitle: "🎨 Assembled Assembly Cross-Section Blueprint",
+                leg1: "Split Guard Body", leg2: "Rotor Shaft", leg3: "Target Clearance Zone",
+                errFields: "Alert: Please fill all measurement fields with valid positive numbers before analyzing.",
+                errCalc: "Dimensional Error: Shaft diameter exceeds or equals inner guard diameter! Check values.",
+                stWait: "Awaiting Data", stGood: "✅ Secure & In-Range Clearance",
+                stTight: "⚠️ Too Tight (Mechanical Friction Hazard)", stLoose: "❌ Too Loose (High Risk Oil Leak)"
             },
             fr: {
-                dir: "ltr",
-                title: "⚙️ Système d'Analyse du Jeu de l'Oil Guard",
-                subtitle: "Application d'ingénierie pour le calcul précis des joints de grands alternateurs",
-                inputSection: "📥 Saisie des Mesures Mécaniques (mm)",
-                horizLabel: "↔️ Diamètre Intérieur Horizontal (Joint d'huile fendu):",
-                horizR: "Demi-côté Droit (A)",
-                horizL: "Demi-côté Gauche (B)",
-                vertLabel: "↕️ Diamètre Intérieur Vertical:",
-                shaftLabel: "⭕ Diamètre Extérieur de l'Arbre Rotor:",
-                btnCalc: "📊 Calculer le Jeu et les Limites Standards",
-                outputSection: "📋 Rapport d'Inspection Technique du Jeu",
-                resActual: "Jeu Réel Actuel",
-                resStatus: "Statut du Jeu",
-                resMin: "Jeu Minimum Ingénierie Autorisé",
-                resMax: "Jeu Maximum Ingénierie Autorisé",
-                diagramTitle: "🎨 Diagramme de Section Transversale (Arbre dans le joint):",
-                legGuard: "Oil Guard Fendu",
-                legShaft: "Arbre Rotor",
-                legGap: "Espace de Jeu",
-                alertFields: "Veuillez saisir toutes les mesures correctement avec des valeurs positives.",
-                alertError: "Erreur d'Ingénierie: Le diamètre du joint est inférieur ou égal à celui de l'arbre!",
-                statusGood: "✅ Jeu Excellent (Dans les normes)",
-                statusTight: "⚠️ Trop Serré (Risque de friction)",
-                statusLoose: "❌ Trop Lâche (Fuite d'huile certaine)"
+                navTitle: "Analyseur de Jeu d'Oil Guard", navSubtitle: "Plateforme de calculs mécaniques pour grands alternateurs",
+                secInputTitle: "Saisie des Dimensions Mécaniques (mm)", secInputDesc: "Veuillez entrer les mesures du micromètre avec précision",
+                lblHorizMain: "↔️ Diamètre Intérieur Horizontal (Deux Moitiés):", lblSideA: "A (Droit)", lblSideB: "B (Gauche)",
+                lblVert: "↕️ Diamètre Intérieur Vertical:", lblShaft: "⭕ Diamètre Extérieur de l'Arbre (Shaft):",
+                btnSubmit: "Analyser & Vérifier les Calculs 📊", secOutputTitle: "Rapport de Qualité et d'Analyse du Jeu",
+                outLblActual: "Jeu Réel Actuel", outLblMin: "Jeu Minimum Autorisé", outLblMax: "Jeu Maximum Autorisé",
+                diagramTitle: "🎨 Plan de Coupe Transversale de l'Assemblage",
+                leg1: "Corps du Joint Fendu", leg2: "Arbre Rotor", leg3: "Zone de Jeu Cible",
+                errFields: "Alerte: Veuillez remplir tous les champs avec des nombres positifs valides avant l'analyse.",
+                errCalc: "Erreur Dimensionnelle: Le diamètre de l'arbre dépasse ou égale le diamètre du joint! Vérifiez.",
+                stWait: "En attente", stGood: "✅ Jeu Sûr et Conforme aux Normes",
+                stTight: "⚠️ Jeu Trop Serré (Risque de Friction)", stLoose: "❌ Jeu Trop Lâche (Risque Élevé de Fuite)"
             }
         };
 
         let currentLang = 'ar';
-        let isDarkMode = true;
 
-        // دالة تبديل اللغة وتعديل الاتجاه
-        function setLanguage(lang) {
+        // دالة تبديل اللغات وتعديل الاتجاهات والواجهات الجانبية
+        function changeLang(lang) {
             currentLang = lang;
-            const data = translations[lang];
+            const dict = dictionary[lang];
             
-            // تحديث اتجاه الصفحة
-            document.getElementById('app-html').setAttribute('dir', data.dir);
-            document.getElementById('app-html').setAttribute('lang', lang);
+            // تغيير اتجاه هيكل التطبيق بالكامل
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', lang);
 
-            // ترجمة النصوص والواجهات
-            document.getElementById('txt-title').innerText = data.title;
-            document.getElementById('txt-subtitle').innerText = data.subtitle;
-            document.getElementById('txt-input-section').innerText = data.inputSection;
-            document.getElementById('txt-horiz-label').innerText = data.horizLabel;
-            document.getElementById('txt-horiz-r').innerText = data.horizR;
-            document.getElementById('txt-horiz-l').innerText = data.horizL;
-            document.getElementById('txt-vert-label').innerText = data.vertLabel;
-            document.getElementById('txt-shaft-label').innerText = data.shaftLabel;
-            document.getElementById('txt-btn-calc').innerText = data.btnCalc;
-            document.getElementById('txt-output-section').innerText = data.outputSection;
-            document.getElementById('txt-res-actual').innerText = data.resActual;
-            document.getElementById('txt-res-status').innerText = data.resStatus;
-            document.getElementById('txt-res-min').innerText = data.resMin;
-            document.getElementById('txt-res-max').innerText = data.resMax;
-            document.getElementById('txt-diagram-title').innerText = data.diagramTitle;
-            document.getElementById('leg-guard').innerText = data.legGuard;
-            document.getElementById('leg-shaft').innerText = data.legShaft;
-            document.getElementById('leg-gap').innerText = data.legGap;
+            // ترجمة كافة العناصر النصية في الشاشة
+            document.getElementById('nav-title').innerText = dict.navTitle;
+            document.getElementById('nav-subtitle').innerText = dict.navSubtitle;
+            document.getElementById('sec-input-title').innerText = dict.secInputTitle;
+            document.getElementById('sec-input-desc').innerText = dict.secInputDesc;
+            document.getElementById('lbl-horiz-main').innerText = dict.lblHorizMain;
+            document.getElementById('lbl-side-a').innerText = dict.lblSideA;
+            document.getElementById('lbl-side-b').innerText = dict.lblSideB;
+            document.getElementById('lbl-vert').innerText = dict.lblVert;
+            document.getElementById('lbl-shaft').innerText = dict.lblShaft;
+            document.getElementById('btn-submit').innerText = dict.btnSubmit;
+            document.getElementById('sec-output-title').innerText = dict.secOutputTitle;
+            document.getElementById('out-lbl-actual').innerText = dict.outLblActual;
+            document.getElementById('out-lbl-min').innerText = dict.outLblMin;
+            document.getElementById('out-lbl-max').innerText = dict.outLblMax;
+            document.getElementById('diagram-title').innerText = dict.diagramTitle;
+            document.getElementById('leg-1').innerText = dict.leg1;
+            document.getElementById('leg-2').innerText = dict.leg2;
+            document.getElementById('leg-3').innerText = dict.leg3;
 
-            // إعادة تصفير لوحة النتائج لتفادي تداخل اللغات قبل الحساب الجديد
-            document.getElementById('res_actual').innerText = "-";
-            document.getElementById('res_status').innerText = "-";
-            document.getElementById('res_status').className = "text-sm font-bold text-gray-400";
-            document.getElementById('res_min').innerText = "-";
-            document.getElementById('res_max').innerText = "-";
+            // إعادة تعيين شارات الحالة والتقارير لتفادي الخلط
+            document.getElementById('out-actual').innerText = "-";
+            document.getElementById('out-min').innerText = "-";
+            document.getElementById('out-max').innerText = "-";
+            const badge = document.getElementById('badge-status');
+            badge.innerText = dict.stWait;
+            badge.className = "px-2.5 py-1 rounded text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-400";
 
-            // إدارة شكل الأزرار النشطة
+            // إدارة شكل وهيئة أزرار اللغات النشطة وغير النشطة
             ['ar', 'en', 'fr'].forEach(l => {
-                const btn = document.getElementById(`lang-${l}`);
-                if(l === lang) {
-                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition bg-blue-600 text-white";
+                const btn = document.getElementById(`btn-${l}`);
+                if (l === lang) {
+                    btn.className = "rounded-md px-3 py-1 text-xs font-semibold bg-white dark:bg-slate-900 shadow-sm text-blue-600 dark:text-blue-400";
                 } else {
-                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200";
+                    btn.className = "rounded-md px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
                 }
             });
         }
 
-        // دالة تبديل الوضع الليلي والمضيء (Dark/Light Mode)
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            const body = document.getElementById('app-body');
-            const mainCard = document.getElementById('main-card');
-            const themeBtn = document.getElementById('theme-btn');
-            const themeTxt = document.getElementById('txt-theme');
-
-            if (isDarkMode) {
-                document.documentElement.classList.add('dark');
-                body.className = "bg-gray-900 text-gray-100 min-h-screen p-4 md:p-8 transition-all duration-300";
-                themeBtn.innerHTML = "☀️ <span id='txt-theme'>الوضع المضيء</span>";
-                if(currentLang === 'en') themeBtn.innerHTML = "☀️ <span>Light Mode</span>";
-                if(currentLang === 'fr') themeBtn.innerHTML = "☀️ <span>Mode Clair</span>";
+        // دالة إصلاح وتشغيل الوضع الداكن والليلي بشكل جذري وحقيقي
+        function toggleTheme() {
+            const htmlClass = document.documentElement.classList;
+            const icon = document.getElementById('theme-icon');
+            
+            if (htmlClass.contains('dark')) {
+                htmlClass.remove('dark');
+                icon.innerText = "🌙"; // تبديل الأيقونة للإشارة للوضع الآخر
             } else {
-                document.documentElement.classList.remove('dark');
-                body.className = "bg-gray-100 text-gray-900 min-h-screen p-4 md:p-8 transition-all duration-300";
-                themeBtn.innerHTML = "🌙 <span id='txt-theme'>الوضع الداكن</span>";
-                if(currentLang === 'en') themeBtn.innerHTML = "🌙 <span>Dark Mode</span>";
-                if(currentLang === 'fr') themeBtn.innerHTML = "🌙 <span>Mode Sombre</span>";
+                htmlClass.add('dark');
+                icon.innerText = "☀️";
             }
         }
 
-        // دالة الحساب الفنية والهندسية لخلوص الزيت
-        function calculateClearance() {
-            const data = translations[currentLang];
-            const h1 = parseFloat(document.getElementById('horiz_1').value);
-            const h2 = parseFloat(document.getElementById('horiz_2').value);
-            const v = parseFloat(document.getElementById('vert').value);
-            const shaft = parseFloat(document.getElementById('shaft').value);
+        // محرك الاحتساب الميكانيكي وتحليل نسب الخلوص
+        function processData() {
+            const dict = dictionary[currentLang];
+            const h1 = parseFloat(document.getElementById('inp-h1').value);
+            const h2 = parseFloat(document.getElementById('inp-h2').value);
+            const v = parseFloat(document.getElementById('inp-v').value);
+            const shaft = parseFloat(document.getElementById('inp-shaft').value);
 
+            // 1. التحقق الصارم من المدخلات
             if (isNaN(h1) || h1 <= 0 || isNaN(h2) || h2 <= 0 || isNaN(v) || v <= 0 || isNaN(shaft) || shaft <= 0) {
-                alert(data.alertFields);
+                alert(dict.errFields);
                 return;
             }
 
-            const avgHorizontal = (h1 + h2);
-            const avgGuardDiameter = (avgHorizontal + v) / 2;
-            const actualClearance = avgGuardDiameter - shaft;
+            // 2. حساب القراءات الميكانيكية لقطر المانع الداخلي المجموع
+            const avgHorizontal = h1 + h2;
+            const computedGuardDiameter = (avgHorizontal + v) / 2;
+            const actualClearance = computedGuardDiameter - shaft;
 
             if (actualClearance <= 0) {
-                alert(data.alertError);
+                alert(dict.errCalc);
                 return;
             }
 
-            // الحسابات المعيارية الميكانيكية (0.0010 إلى 0.0020 من القطر)
-            const minAllowed = shaft * 0.0010;
-            const maxAllowed = shaft * 0.0020;
+            /* 
+               3. الحدود الهندسية المعتمدة للمولدات الصناعية الكبيرة:
+               - أدنى خلوص هندسي آمن = 0.0010 من قطر العمود
+               - أقصى خلوص هندسي مسموح = 0.0020 من قطر العمود
+            */
+            const minLimit = shaft * 0.0010;
+            const maxLimit = shaft * 0.0020;
 
-            document.getElementById('res_actual').innerText = actualClearance.toFixed(3) + " mm";
-            document.getElementById('res_min').innerText = minAllowed.toFixed(3) + " mm";
-            document.getElementById('res_max').innerText = maxAllowed.toFixed(3) + " mm";
+            // طباعة القيم المخرجة وتقريبها لثلاث علامات عشرية ميكرونية
+            document.getElementById('out-actual').innerText = actualClearance.toFixed(3) + " mm";
+            document.getElementById('out-min').innerText = minLimit.toFixed(3) + " mm";
+            document.getElementById('out-max').innerText = maxLimit.toFixed(3) + " mm";
 
-            const statusEl = document.getElementById('res_status');
-            const svgShaft = document.getElementById('svg_shaft');
+            // 4. تقييم الحالة وتعديل الشارة والرسومات التوضيحية بناء على النتيجة
+            const badge = document.getElementById('badge-status');
+            const svgShaftCircle = document.getElementById('svg-shaft');
 
-            if (actualClearance >= minAllowed && actualClearance <= maxAllowed) {
-                statusEl.innerText = data.statusGood;
-                statusEl.className = "text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 px-2 py-1 rounded";
-                svgShaft.setAttribute('stroke', '#10b981');
-            } else if (actualClearance < minAllowed) {
-                statusEl.innerText = data.statusTight;
-                statusEl.className = "text-sm font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/50 px-2 py-1 rounded";
-                svgShaft.setAttribute('stroke', '#f59e0b');
+            if (actualClearance >= minLimit && actualClearance <= maxLimit) {
+                badge.innerText = dict.stGood;
+                badge.className = "px-2.5 py-1 rounded text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50";
+                svgShaftCircle.setAttribute('stroke', '#10b981'); // أخضر مستقر
+            } else if (actualClearance < minLimit) {
+                badge.innerText = dict.stTight;
+                badge.className = "px-2.5 py-1 rounded text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200/50";
+                svgShaftCircle.setAttribute('stroke', '#f59e0b'); // برتقالي منذر بالخطر
             } else {
-                statusEl.innerText = data.statusLoose;
-                statusEl.className = "text-sm font-bold text-rose-600 dark:text-rose-400 bg-rose-100 dark:bg-rose-950/50 px-2 py-1 rounded";
-                svgShaft.setAttribute('stroke', '#ef4444');
+                badge.innerText = dict.stLoose;
+                badge.className = "px-2.5 py-1 rounded text-xs font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/50";
+                svgShaftCircle.setAttribute('stroke', '#ef4444'); // أحمر متأكل ومسرب
             }
 
-            // تحريك حجم العمود بالرسم ديناميكياً لتوضيح الفجوة الميكانيكية
-            const visualRatio = (shaft / avgGuardDiameter) * 80;
-            svgShaft.setAttribute('r', Math.max(45, Math.min(visualRatio, 83)));
+            // محاكاة بصرية تفاعلية دقيقة لحجم فجوة الخلوص في الرسم الهندسي
+            const calculatedRadius = (shaft / computedGuardDiameter) * 78;
+            svgShaftCircle.setAttribute('r', Math.max(45, Math.min(calculatedRadius, 80)));
         }
-
-        // بدء التطبيق باللغة العربية والوضع الداكن افتراضياً
-        document.documentElement.classList.add('dark');
-        setLanguage('ar');
     </script>
 </body>
 </html>

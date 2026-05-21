@@ -3,151 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محلل خلوص مانع تسرب الزيت الهيدروليكي</title>
-    <!-- استدعاء مكتبة التنسيق السريع مع تخصيص الألوان الافتراضية للثيم الهندسي -->
+    <title>محلل خلوص مانع تسرب الزيت - Oil Guard Clearance Analyzer</title>
+    <!-- استدعاء مكتبة التنسيق القياسية -->
     <script src="https://tailwindcss.com"></script>
     <style>
         @import url('https://googleapis.com');
         body { font-family: 'Cairo', sans-serif; transition: background-color 0.2s, color 0.2s; }
         .mono-font { font-family: 'JetBrains Mono', monospace; }
         
-        /* ثيم لوحة التحكم الداكنة الاحترافية (Dark Cyber Theme) */
-        .theme-dark { background-color: #0b0f19; color: #f1f5f9; }
-        .theme-dark .main-card { background-color: #111827; border-color: #1f2937; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
-        .theme-dark .inner-box { background-color: #0b0f19; border-color: #1f2937; }
+        /* نظام الألوان للثيم الداكن الهادئ */
+        .theme-dark { background-color: #090d16; color: #f1f5f9; }
+        .theme-dark .main-card { background-color: #111827; border-color: #1f2937; }
+        .theme-dark .inner-box { background-color: #090d16; border-color: #1f2937; }
         .theme-dark .input-field { background-color: #1f2937; border-color: #374151; color: #ffffff; }
-        .theme-dark .input-field:focus { border-color: #3b82f6; }
         
-        /* ثيم لوحة التحكم المضيئة الفاخرة (Light Tech Theme) */
+        /* نظام الألوان للثيم المضيء المتناسق */
         .theme-light { background-color: #f3f4f6; color: #111827; }
-        .theme-light .main-card { background-color: #ffffff; border-color: #e5e7eb; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .theme-light .main-card { background-color: #ffffff; border-color: #e5e7eb; }
         .theme-light .inner-box { background-color: #f9fafb; border-color: #e5e7eb; }
         .theme-light .input-field { background-color: #ffffff; border-color: #d1d5db; color: #111827; }
-        .theme-light .input-field:focus { border-color: #2563eb; }
     </style>
 </head>
-<body id="body-context" class="theme-dark min-h-screen flex flex-col antialiased">
+<body id="body-context" class="theme-dark min-h-screen flex flex-col justify-between antialiased text-sm">
 
-    <!-- شريط القيادة والتنقل الفاخر -->
-    <header id="header-bar" class="w-full bg-slate-900/90 border-b border-slate-800 shadow-lg backdrop-blur sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg text-white shadow-md shadow-blue-500/20">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                </div>
+    <!-- شريط علوي نحيف ومضغوط بالكامل -->
+    <header id="header-bar" class="w-full bg-slate-900 border-b border-slate-800 shadow p-3">
+        <div class="max-w-4xl mx-auto flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">⚙️</span>
                 <div>
-                    <h1 class="text-sm font-bold tracking-tight text-white" id="nav-title">محلل خلوص الـ Oil Guard</h1>
-                    <p class="text-[10px] text-blue-400 font-semibold uppercase tracking-wider" id="nav-subtitle">حالة القياس: الراحة والارتكاز السفلي</p>
+                    <h1 class="text-xs font-bold text-white" id="nav-title">محلل خلوص الـ Oil Guard</h1>
+                    <p class="text-[10px] text-blue-400 font-semibold" id="nav-subtitle">الميكانيكا الصناعية: ارتكاز سفلي في حالة الراحة</p>
                 </div>
             </div>
             
-            <div class="flex items-center gap-4">
-                <!-- مبدل اللغات الفاخر -->
-                <div id="lang-zone" class="inline-flex rounded-lg bg-slate-800 p-0.5 border border-slate-700/80 shadow-inner">
-                    <button onclick="changeLang('ar')" id="btn-ar" class="rounded-md px-2.5 py-1 text-[11px] font-bold transition bg-slate-950 text-blue-400 shadow">العربية</button>
-                    <button onclick="changeLang('en')" id="btn-en" class="rounded-md px-2.5 py-1 text-[11px] font-bold transition text-slate-400 hover:text-white">EN</button>
-                    <button onclick="changeLang('fr')" id="btn-fr" class="rounded-md px-2.5 py-1 text-[11px] font-bold transition text-slate-400 hover:text-white">FR</button>
+            <div class="flex items-center gap-3">
+                <!-- مبدل اللغات المصغر -->
+                <div id="lang-zone" class="inline-flex rounded bg-slate-800 p-0.5 border border-slate-700">
+                    <button onclick="changeLang('ar')" id="btn-ar" class="rounded px-2 py-0.5 text-[10px] font-bold bg-slate-950 text-blue-400 shadow">العربية</button>
+                    <button onclick="changeLang('en')" id="btn-en" class="rounded px-2 py-0.5 text-[10px] font-bold text-slate-400 hover:text-white">EN</button>
+                    <button onclick="changeLang('fr')" id="btn-fr" class="rounded px-2 py-0.5 text-[10px] font-bold text-slate-400 hover:text-white">FR</button>
                 </div>
-                <!-- زر السمة المطوّر -->
-                <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white cursor-pointer text-[11px] font-bold transition flex items-center gap-1.5 shadow">
+                <!-- زر السمة النحيف -->
+                <button onclick="toggleTheme()" id="theme-toggle-btn" class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white text-[10px] font-bold transition">
                     ☀️ <span id="theme-text">وضع مضيء</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- الواجهات الهندسية الرئيسية المنسقة -->
-    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- الهيكل الرئيسي المنظم بدقة ومحاذاة تامة للأبعاد -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-4 flex flex-col justify-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
             
-            <!-- لوحة المدخلات (تأخذ 5 أعمدة) -->
-            <section id="card-input" class="main-card lg:col-span-5 rounded-xl border p-5 space-y-5 transition-all">
-                <div class="border-b border-slate-700/30 pb-3">
-                    <h2 class="text-xs font-bold uppercase text-blue-500 dark:text-blue-400 tracking-wider" id="sec-input-title">أبعاد القياس الميكانيكي (mm)</h2>
-                    <p class="text-[10px] text-slate-400 mt-0.5" id="sec-input-desc">أدخل القراءات الفعلية بدقة لتحديد الفجوة</p>
-                </div>
+            <!-- لوحة القياسات (5 أعمدة) -->
+            <section id="card-input" class="main-card lg:col-span-5 rounded-xl border p-4 flex flex-col justify-between gap-4">
+                <div>
+                    <div class="border-b border-slate-700/30 pb-2 mb-3">
+                        <h2 class="text-xs font-bold uppercase text-blue-400 tracking-wider" id="sec-input-title">أبعاد القياس الميكانيكي (mm)</h2>
+                        <p class="text-[10px] text-slate-400 mt-0.5" id="sec-input-desc">أدخل قراءات الميكرومتر بدقة لحساب الخلوص</p>
+                    </div>
 
-                <!-- مدخل القطر الأفقي -->
-                <div class="space-y-2">
-                    <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-300" id="lbl-horiz-main">↔️ القطر الأفقي الداخلي المجموع (A + B):</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="relative">
-                            <span class="absolute right-3 top-2.5 text-[10px] text-slate-400 font-bold" id="lbl-side-a">A (يمين)</span>
-                            <input type="number" id="inp-h1" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg py-2 pl-3 pr-14 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
+                    <!-- القراءات الأفقية المستقلة للقطر (لحساب المتوسط) -->
+                    <div class="space-y-1 mb-3">
+                        <label class="block text-[11px] font-bold text-slate-300" id="lbl-horiz-main">↔️ قراءات القطر الأفقي (للتحقق من البيضاوية):</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="relative">
+                                <span class="absolute right-2 top-2 text-[9px] text-slate-400 font-bold" id="lbl-side-a">قراءة 1</span>
+                                <input type="number" id="inp-h1" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-md py-1.5 pl-2 pr-12 text-left focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs">
+                            </div>
+                            <div class="relative">
+                                <span class="absolute right-2 top-2 text-[9px] text-slate-400 font-bold" id="lbl-side-b">قراءة 2</span>
+                                <input type="number" id="inp-h2" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-md py-1.5 pl-2 pr-12 text-left focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs">
+                            </div>
                         </div>
-                        <div class="relative">
-                            <span class="absolute right-3 top-2.5 text-[10px] text-slate-400 font-bold" id="lbl-side-b">B (يسار)</span>
-                            <input type="number" id="inp-h2" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg py-2 pl-3 pr-14 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
-                        </div>
+                    </div>
+
+                    <!-- القطر العمودي للقطعة -->
+                    <div class="space-y-1 mb-3">
+                        <label for="inp-v" class="block text-[11px] font-bold text-slate-300" id="lbl-vert">↕️ قراءة القطر العمودي الداخلي للمانع:</label>
+                        <input type="number" id="inp-v" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-md p-1.5 text-left focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs">
+                    </div>
+
+                    <!-- القطر الخارجي للعمود الدوار -->
+                    <div class="space-y-1">
+                        <label for="inp-shaft" class="block text-[11px] font-bold text-slate-300" id="lbl-shaft">⭕ القطر الخارجي لعمود الدوران (Shaft):</label>
+                        <input type="number" id="inp-shaft" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-md p-1.5 text-left focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs">
                     </div>
                 </div>
 
-                <!-- مدخل القطر العمودي -->
-                <div class="space-y-1.5">
-                    <label for="inp-v" class="block text-[11px] font-bold text-slate-400 dark:text-slate-300" id="lbl-vert">↕️ القطر العمودي الداخلي للمانع:</label>
-                    <input type="number" id="inp-v" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg p-2.5 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
-                </div>
-
-                <!-- قطر العمود -->
-                <div class="space-y-1.5">
-                    <label for="inp-shaft" class="block text-[11px] font-bold text-slate-400 dark:text-slate-300" id="lbl-shaft">⭕ القطر الخارجي لعمود الدوران (Shaft):</label>
-                    <input type="number" id="inp-shaft" placeholder="0.000" step="0.001" class="input-field mono-font w-full border rounded-lg p-2.5 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold transition">
-                </div>
-
-                <button onclick="processData()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg shadow-blue-500/10 transition transform active:scale-[0.99] cursor-pointer text-xs" id="btn-submit">
+                <button onclick="processData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-md shadow transition transform active:scale-[0.99] text-xs cursor-pointer" id="btn-submit">
                     تحليل وتدقيق البيانات الحسابية 📊
                 </button>
             </section>
 
-            <!-- لوحة التقارير والرسم التوضيحي الثابت المصغر (تأخذ 7 أعمدة) -->
-            <section id="card-output" class="main-card lg:col-span-7 rounded-xl border p-5 flex flex-col justify-between gap-5 transition-all">
+            <!-- لوحة تقرير الجودة والرسم الرمزي المصغر (7 أعمدة) -->
+            <section id="card-output" class="main-card lg:col-span-7 rounded-xl border p-4 flex flex-col justify-between gap-4">
                 
-                <!-- تقرير المخرجات الحسابية الرقمية -->
+                <!-- البيانات والمخرجات الرقمية متناسقة الهوامش -->
                 <div>
-                    <div class="border-b border-slate-700/30 pb-3 mb-4 flex items-center justify-between">
-                        <h2 class="text-xs font-bold uppercase text-emerald-500 dark:text-emerald-400 tracking-wider" id="sec-output-title">تقرير جودة وتحليل الخلوص</h2>
-                        <span id="badge-status" class="px-2.5 py-1 rounded-md text-[10px] font-bold inner-box border text-slate-400 tracking-wide">في انتظار البيانات</span>
+                    <div class="border-b border-slate-700/30 pb-2 mb-3 flex items-center justify-between">
+                        <h2 class="text-xs font-bold uppercase text-emerald-400 tracking-wider" id="sec-output-title">تقرير جودة وتحليل الخلوص</h2>
+                        <span id="badge-status" class="px-2 py-0.5 rounded text-[10px] font-bold inner-box border text-slate-400">في انتظار البيانات</span>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="inner-box p-3 rounded-xl border text-center shadow-sm">
-                            <span class="text-[10px] text-slate-400 font-bold block mb-1" id="out-lbl-actual">الخلوص الفعلي الحالي</span>
-                            <span id="out-actual" class="mono-font text-lg font-bold block text-blue-500 dark:text-blue-400 mt-0.5">-</span>
+                    <!-- مربعات منسقة بمحاذاة تامة للنصوص الداخلية -->
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="inner-box p-2 rounded-md border text-center">
+                            <span class="text-[10px] text-slate-400 font-bold block mb-1" id="out-lbl-actual">الخلوص الحالي الفعلي</span>
+                            <span id="out-actual" class="mono-font text-sm font-bold text-blue-400 block">-</span>
                         </div>
-                        <div class="inner-box p-3 rounded-xl border text-center border-b-2 border-b-emerald-500 shadow-sm">
+                        <div class="inner-box p-2 rounded-md border text-center border-b-2 border-b-emerald-500">
                             <span class="text-[10px] text-emerald-500 font-bold block mb-1" id="out-lbl-min">أدنى مسموح</span>
-                            <span id="out-min" class="mono-font text-sm font-bold text-emerald-500 dark:text-emerald-400 block mt-1">-</span>
+                            <span id="out-min" class="mono-font text-xs font-bold text-emerald-400 block">-</span>
                         </div>
-                        <div class="inner-box p-3 rounded-xl border text-center border-b-2 border-b-rose-500 shadow-sm">
+                        <div class="inner-box p-2 rounded-md border text-center border-b-2 border-b-rose-500">
                             <span class="text-[10px] text-rose-500 font-bold block mb-1" id="out-lbl-max">أقصى مسموح</span>
-                            <span id="out-max" class="mono-font text-sm font-bold text-rose-500 dark:text-rose-400 block mt-1">-</span>
+                            <span id="out-max" class="mono-font text-xs font-bold text-rose-400 block">-</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- أيقونة هندسية مصغرة جداً وثابتة لشرح حالة الراحة الميكانيكية -->
-                <div class="inner-box rounded-xl border p-3 flex items-center gap-4 bg-slate-950/20 shadow-inner">
-                    <!-- حجم الصندوق تم تصغيره بشكل فائق (w-14 h-14 فقط) ليعمل كأيقونة ورمز تعبيري ثابت -->
-                    <div class="w-14 h-14 relative flex items-center justify-center bg-slate-900/40 rounded-full border border-slate-700/30 flex-shrink-0">
-                        <svg id="blueprint" viewBox="0 0 100 100" class="w-full h-full">
-                            <!-- دائرة المانع الثابتة الخارجية باللون الأحمر -->
+                <!-- الرسم الهندسي الرمزي: مصغر للغاية ومجرد أيقونة توضيحية جانبية ثابتة لشرح الارتكاز السفلي فقط -->
+                <div class="inner-box rounded-lg border p-2 flex items-center gap-3 bg-slate-900/10">
+                    <!-- تصغير فائق لصندوق الرسم (w-12 h-12 فقط) لمنع الضخامة المزعجة -->
+                    <div class="w-12 h-12 relative flex items-center justify-center bg-slate-950/40 rounded-full border border-slate-800 flex-shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <!-- دائرة المانع الثابتة الخارجية -->
                             <circle cx="50" cy="50" r="46" fill="none" stroke="#ef4444" stroke-width="3" />
-                            <!-- خط انقسام ميكانيكي وهمي بالمنتصف -->
-                            <line x1="5" y1="50" x2="95" y2="50" stroke="#64748b" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.5"/>
-                            <!-- دائرة العمود: ثابتة ومستقلة، منزاحة لأسفل لتلمس القاع تماماً لشرح ميكانيكية الراحة -->
-                            <circle cx="50" cy="57" r="39" fill="#475569" stroke="#3b82f6" stroke-width="1.5" />
-                            <!-- مركز قياس السنتر -->
+                            <!-- خط الفاصل الأفقي للنصفين -->
+                            <line x1="5" y1="50" x2="95" y2="50" stroke="#64748b" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.4"/>
+                            <!-- دائرة العمود الثابتة الرمزية ملتصقة بالقاع تمامًا -->
+                            <circle cx="50" cy="56" r="40" fill="#475569" stroke="#3b82f6" stroke-width="1.5" />
                             <circle cx="50" cy="50" r="1" fill="#eab308" />
                         </svg>
                     </div>
 
-                    <!-- نصوص الدليل والشرح المعزولة بجانب الرمز -->
-                    <div class="flex-grow space-y-1">
+                    <!-- النصوص التوضيحية المنظمة موازية للأيقونة المصغرة -->
+                    <div class="flex-grow space-y-0.5">
                         <h4 class="text-[10px] font-bold text-slate-400" id="diagram-title">🎨 محاكاة حالة الراحة (أيقونة توضيحية للحالة فقط)</h4>
-                        <div class="flex gap-3 text-[9px] font-semibold text-slate-400/80 flex-wrap">
-                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span><span id="leg-1">المانع</span></span>
-                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span><span id="leg-2">العمود (ملتصق لأسفل)</span></span>
-                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span><span id="leg-3">فجوة الخلوص (في الأعلى دائماً)</span></span>
+                        <div class="flex gap-3 text-[9px] font-semibold text-slate-500 flex-wrap">
+                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-sm"></span><span id="leg-1">المانع</span></span>
+                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-blue-500 rounded-sm"></span><span id="leg-2">العمود (ملتصق لأسفل)</span></span>
+                            <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-yellow-500 rounded-sm"></span><span id="leg-3">الفجوة (في الأعلى دائماً)</span></span>
                         </div>
                     </div>
                 </div>
@@ -156,18 +154,23 @@
         </div>
     </main>
 
+    <!-- تذييل الصفحة النحيف جداً لإغلاق الفراغات السفليّة -->
+    <footer class="w-full text-center py-2 border-t border-slate-800/10 dark:border-slate-800 text-[9px] text-slate-500">
+        Oil Guard Clearance Calculator Engine v2.1
+    </footer>
+
     <script>
-        // قاموس اللغات المهني الثابت
+        // مصفوفة اللغات والترجمات المتناسقة
         const dictionary = {
             ar: {
-                navTitle: "محلل خلوص الـ Oil Guard", navSubtitle: "حالة القياس: الراحة والارتكاز السفلي",
-                secInputTitle: "أبعاد القياس الميكانيكي (mm)", secInputDesc: "أدخل القراءات الفعلية بدقة لتحديد الفجوة",
-                lblHorizMain: "↔️ القطر الأفقي الداخلي المجموع (A + B):", lblSideA: "A (يمين)", lblSideB: "B (يسار)",
-                lblVert: "↕️ القطر العمودي الداخلي للمانع:", lblShaft: "⭕ القطر الخارجي لعمود الدوران (Shaft):",
+                navTitle: "محلل خلوص الـ Oil Guard", navSubtitle: "الميكانيكا الصناعية: ارتكاز سفلي في حالة الراحة",
+                secInputTitle: "أبعاد القياس الميكانيكي (mm)", secInputDesc: "أدخل قراءات الميكرومتر بدقة لحساب الخلوص",
+                lblHorizMain: "↔️ قراءات القطر الأفقي (للتحقق من البيضاوية):", lblSideA: "قراءة 1", lblSideB: "قراءة 2",
+                lblVert: "↕️ قراءة القطر العمودي الداخلي للمانع:", lblShaft: "⭕ القطر الخارجي لعمود الدوران (Shaft):",
                 btnSubmit: "تحليل وتدقيق البيانات الحسابية 📊", secOutputTitle: "تقرير جودة وتحليل الخلوص",
-                outLblActual: "الخلوص الفعلي الحالي", outLblMin: "أدنى مسموح", outLblMax: "أقصى مسموح",
+                outLblActual: "الخلوص الحالي الفعلي", outLblMin: "أدنى مسموح", outLblMax: "أقصى مسموح",
                 diagramTitle: "🎨 محاكاة حالة الراحة (أيقونة توضيحية للحالة فقط)",
-                leg1: "المانع", leg2: "العمود (ملتصق لأسفل)", leg3: "فجوة الخلوص (في الأعلى دائماً)",
+                leg1: "المانع", leg2: "العمود (ملتصق لأسفل)", leg3: "الفجوة (في الأعلى دائماً)",
                 errFields: "تنبيه: يُرجى ملء حقول القياس بأرقام موجبة صحيحة.",
                 errCalc: "خطأ: قطر العمود أكبر أو مساوي لقطر المانع! تحقق من الأرقام.",
                 stWait: "في انتظار البيانات", stGood: "✅ خلوص آمن وممتاز",
@@ -175,14 +178,14 @@
                 txtLight: "وضع مضيء", txtDark: "وضع داكن"
             },
             en: {
-                navTitle: "Oil Guard Clearance Analyzer", navSubtitle: "Measurement State: Rest & Bottom Contact",
+                navTitle: "Oil Guard Clearance Analyzer", navSubtitle: "Industrial Mechanics: Bottom Rest Position",
                 secInputTitle: "Mechanical Dimensions (mm)", secInputDesc: "Enter micrometer values to evaluate clearance",
-                lblHorizMain: "↔️ Total Horizontal Inner Diameter (A + B):", lblSideA: "A (Right)", lblSideB: "B (Left)",
+                lblHorizMain: "↔️ Horizontal Diameter Readings (Ovality Check):", lblSideA: "Meas 1", lblSideB: "Meas 2",
                 lblVert: "↕️ Guard Vertical Inner Diameter:", lblShaft: "⭕ Rotor Shaft Outer Diameter:",
                 btnSubmit: "Analyze & Verify Data 📊", secOutputTitle: "Clearance Evaluation Report",
                 outLblActual: "Actual Clearance", outLblMin: "Min Limit", outLblMax: "Max Limit",
                 diagramTitle: "🎨 Rest Position Simulation (Iconic Illustration Only)",
-                leg1: "Guard", leg2: "Shaft (Bottomed)", leg3: "Clearance Gap (Always Top)",
+                leg1: "Guard", leg2: "Shaft (Bottomed)", leg3: "Gap (Always Top)",
                 errFields: "Alert: Please fill all fields with valid positive dimensions.",
                 errCalc: "Error: Shaft exceeds or equals inner guard diameter! Check values.",
                 stWait: "Awaiting Data", stGood: "✅ Secure & Safe Clearance",
@@ -190,9 +193,9 @@
                 txtLight: "Light Mode", txtDark: "Dark Mode"
             },
             fr: {
-                navTitle: "Analyseur de Jeu d'Oil Guard", navSubtitle: "État: Repos & Contact Inférieur",
+                navTitle: "Analyseur de Jeu d'Oil Guard", navSubtitle: "Mécanique: Position de Repos Inférieure",
                 secInputTitle: "Dimensions Mécaniques (mm)", secInputDesc: "Saisissez les valeurs du micromètre",
-                lblHorizMain: "↔️ Diamètre Horizontal Total (A + B):", lblSideA: "A (Droit)", lblSideB: "B (Gauche)",
+                lblHorizMain: "↔️ Lectures du Diamètre Horizontal (Vérif Ovalité):", lblSideA: "Mesure 1", lblSideB: "Mesure 2",
                 lblVert: "↕️ Joint Diamètre Vertical:", lblShaft: "⭕ Diamètre de l'Arbre Rotor (Shaft):",
                 btnSubmit: "Analyser les Données 📊", secOutputTitle: "Rapport d'Analyse du Jeu",
                 outLblActual: "Jeu Actuel", outLblMin: "Limite Min", outLblMax: "Limite Max",
@@ -234,21 +237,13 @@
             document.getElementById('leg-3').innerText = dict.leg3;
 
             updateThemeButtonText();
-
-            // ريست المخرجات عند التبديل
-            document.getElementById('out-actual').innerText = "-";
-            document.getElementById('out-min').innerText = "-";
-            document.getElementById('out-max').innerText = "-";
-            document.getElementById('badge-status').innerText = dict.stWait;
-            document.getElementById('badge-status').className = "px-2.5 py-1 rounded-md text-[10px] font-bold inner-box border text-slate-400 tracking-wide";
-
+            resetOutputs(dict.stWait);
+            
             ['ar', 'en', 'fr'].forEach(l => {
-                const btn = document.getElementById(`btn-${l}`);
-                btn.className = l === lang ? "rounded-md px-2.5 py-1 text-[11px] font-bold transition bg-slate-950 text-blue-400 shadow" : "rounded-md px-2.5 py-1 text-[11px] font-bold transition text-slate-400 hover:text-white";
+                document.getElementById(`btn-${l}`).className = l === lang ? "rounded px-2 py-0.5 text-[10px] font-bold bg-slate-950 text-blue-400 shadow" : "rounded px-2 py-0.5 text-[10px] font-bold text-slate-400 hover:text-white";
             });
         }
 
-        // دالة تبديل السمة بين وضع التكنولوجيا المضيء ووضع السيبر المظلم
         function toggleTheme() {
             isDarkMode = !isDarkMode;
             const body = document.getElementById('body-context');
@@ -257,15 +252,15 @@
             const btnTheme = document.getElementById('theme-toggle-btn');
             
             if(isDarkMode) {
-                body.className = "theme-dark min-h-screen flex flex-col antialiased";
-                header.className = "w-full bg-slate-900/90 border-b border-slate-800 shadow-lg backdrop-blur sticky top-0 z-50";
-                langZone.className = "inline-flex rounded-lg bg-slate-800 p-0.5 border border-slate-700/80 shadow-inner";
-                btnTheme.className = "p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white cursor-pointer text-[11px] font-bold transition flex items-center gap-1.5 shadow";
+                body.className = "theme-dark min-h-screen flex flex-col justify-between antialiased text-sm";
+                header.className = "w-full bg-slate-900 border-b border-slate-800 shadow p-3";
+                langZone.className = "inline-flex rounded bg-slate-800 p-0.5 border border-slate-700";
+                btnTheme.className = "px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white text-[10px] font-bold transition";
             } else {
-                body.className = "theme-light min-h-screen flex flex-col antialiased";
-                header.className = "w-full bg-white/95 border-b border-slate-200 shadow-md backdrop-blur sticky top-0 z-50";
-                langZone.className = "inline-flex rounded-lg bg-slate-200 p-0.5 border border-slate-300 shadow-inner";
-                btnTheme.className = "p-2 rounded-lg bg-slate-200 border border-slate-300 text-slate-700 hover:bg-slate-300 hover:text-slate-900 cursor-pointer text-[11px] font-bold transition flex items-center gap-1.5 shadow";
+                body.className = "theme-light min-h-screen flex flex-col justify-between antialiased text-sm";
+                header.className = "w-full bg-white border-b border-slate-200 shadow p-3";
+                langZone.className = "inline-flex rounded bg-slate-200 p-0.5 border border-slate-300";
+                btnTheme.className = "px-2 py-1 rounded bg-slate-200 border border-slate-300 text-slate-700 hover:bg-slate-300 hover:text-slate-900 text-[10px] font-bold transition";
             }
             updateThemeButtonText();
         }
@@ -273,13 +268,19 @@
         function updateThemeButtonText() {
             const btnTheme = document.getElementById('theme-toggle-btn');
             const dict = dictionary[currentLang];
-            if(isDarkMode) {
-                btnTheme.innerHTML = `☀️ <span>${dict.txtLight}</span>`;
-            } else {
-                btnTheme.innerHTML = `🌙 <span>${dict.txtDark}</span>`;
-            }
+            btnTheme.innerHTML = isDarkMode ? `☀️ <span>${dict.txtLight}</span>` : `🌙 <span>${dict.txtDark}</span>`;
         }
 
+        function resetOutputs(statusText) {
+            document.getElementById('out-actual').innerText = "-";
+            document.getElementById('out-min').innerText = "-";
+            document.getElementById('out-max').innerText = "-";
+            const badge = document.getElementById('badge-status');
+            badge.innerText = statusText;
+            badge.className = "px-2 py-0.5 rounded text-[10px] font-bold inner-box border text-slate-400";
+        }
+
+        // محرك الحسابات الميكانيكي المصحح
         function processData() {
             const dict = dictionary[currentLang];
             const h1 = parseFloat(document.getElementById('inp-h1').value);
@@ -292,14 +293,17 @@
                 return;
             }
 
-            const avgGuardDiameter = ((h1 + h2) + v) / 2;
-            const actualClearance = avgGuardDiameter - shaft;
+            // التصحيح الهندسي: حساب متوسط القطر الأفقي (وليس المجموع) للتحقق من القطر الفعلي المعتمد
+            const avgHorizontalDiameter = (h1 + h2) / 2;
+            const computedGuardDiameter = (avgHorizontalDiameter + v) / 2;
+            const actualClearance = computedGuardDiameter - shaft;
 
             if (actualClearance <= 0) {
                 alert(dict.errCalc);
                 return;
             }
 
+            // حساب الحدود الهندسية (0.0010 إلى 0.0020 من القطر)
             const minLimit = shaft * 0.0010;
             const maxLimit = shaft * 0.0020;
 
@@ -311,13 +315,13 @@
 
             if (actualClearance >= minLimit && actualClearance <= maxLimit) {
                 badge.innerText = dict.stGood;
-                badge.className = "px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 tracking-wide";
+                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-500 border border-emerald-500/30";
             } else if (actualClearance < minLimit) {
                 badge.innerText = dict.stTight;
-                badge.className = "px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 tracking-wide";
+                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-500 border border-amber-500/30";
             } else {
                 badge.innerText = dict.stLoose;
-                badge.className = "px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-500/10 text-rose-500 border border-rose-500/20 tracking-wide";
+                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-500 border border-rose-500/30";
             }
         }
     </script>
